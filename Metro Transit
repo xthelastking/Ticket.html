@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Transit Ticket</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .ticket-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        .ticket {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .subtext {
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 12px solid #004F9F;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+        }
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+        .time {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .details {
+            font-size: 16px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .expires {
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="ticket">
+            <div class="header">Metro Transit</div>
+            <div class="subtext">Show operator your ticket</div>
+            
+            <div class="logo-container">
+                <div class="circle"></div>
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/MetroTransit_logo.svg/1024px-MetroTransit_logo.svg.png" alt="GoTo">
+                </div>
+            </div>
+            
+            <div class="time" id="clock">Loading...</div>
+            
+            <div class="details">
+                <p>Adult / Rush Hour Fare</p>
+                <p>Minneapolis/St Paul Metro Area</p>
+                <p class="expires" id="expires">Expires: Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            // Format current time
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const amPm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12 || 12; // Convert to 12-hour format
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            const formattedTime = `${hours}:${minutes}:${seconds} ${amPm}`;
+            document.getElementById('clock').textContent = formattedTime;
+
+            // Calculate expiration time (2.5 hours later)
+            const expirationTime = new Date(now.getTime() + 2.5 * 60 * 60 * 1000);
+            let expHours = expirationTime.getHours();
+            let expMinutes = expirationTime.getMinutes();
+            const expAmPm = expHours >= 12 ? 'PM' : 'AM';
+
+            expHours = expHours % 12 || 12;
+            expMinutes = expMinutes < 10 ? '0' + expMinutes : expMinutes;
+
+            const formattedExpTime = `${expHours}:${expMinutes} ${expAmPm}`;
+            const formattedExpDate = expirationTime.toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric'
+            });
+
+            document.getElementById('expires').textContent = `Expires: ${formattedExpDate}, ${formattedExpTime}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call to set immediately
+    </script>
+</body>
+</html>
